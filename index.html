@@ -1,234 +1,587 @@
-<!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Balaca Store — Retro Mini Kameralar</title>
-<meta name="description" content="Balaca Store — vintage ruhlu, retro mini fotokameraların satışı. Hər kadrda bir xatirə." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balaca Store — Vintazh Mini Kamera</title>
+  <meta name="description" content="Balaca Store — vintazh mini kalar. 90-larsa gələn, 20-ci asırın külünü saxlayan kalar online." />
 
-<!-- ============ FONTS (retro serif display + readable serif body + typewriter accent) ============ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Vollkorn:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+  <!-- Retro tipografiya fontları -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
-<!-- ============ TAILWIND (CDN, for spacing/layout/responsive utilities) ============ -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  // Extend Tailwind with our retro token system so utility classes stay consistent everywhere
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          paper:   '#EDE3CE',   // aged paper / base background
-          paper2:  '#E4D8BE',   // slightly deeper paper for panels
-          ink:     '#2B241D',   // near-black warm charcoal (text)
-          leather: '#7C5A3A',   // sepia leather brown
-          rust:    '#B0502B',   // shutter-button accent (used sparingly)
-          olive:   '#6C6B49',   // muted secondary accent
-          brass:   '#A9813F',   // hairline / rule color
-          cream:   '#F6EEDC',
-        },
-        fontFamily: {
-          display: ['Fraunces', 'serif'],
-          body: ['Vollkorn', 'serif'],
-          stamp: ['"Special Elite"', 'monospace'],
-        },
-      }
+  <style>
+    /* ============================================================
+       BALACA STORE — Retro tema
+       ============================================================ */
+    :root{
+      --cream:#f5ecdc;        /* əsas krem */
+      --cream-2:#eee1c7;      /* tünd krem */
+      --paper:#fbf6ea;        /* kağız */
+      --ink:#2c2620;          /* charcoal */
+      --ink-soft:#5b5245;     /* yumşaq charcoal */
+      --terra:#a8573a;        /* terracota vurğusu */
+      --terra-dark:#84422c;
+      --sage:#7c7a5e;
+      --line:#d8c8a4;         /* kəhri-bej xətt */
+      --radius:16px;
     }
-  }
-</script>
 
-<style>
-  /* ============================================================
-     RETRO TOKEN SYSTEM — hand-authored CSS for texture & detail
-     that Tailwind utilities alone can't express (grain, sprocket
-     strip, deckled photo edges, focus rings, transitions).
-     ============================================================ */
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:'Inter',system-ui,-apple-system,sans-serif;
+      color:var(--ink);
+      line-height:1.6;
+      background:
+        radial-gradient(1100px 520px at 8% -10%, rgba(255,252,240,.9), transparent 60%),
+        radial-gradient(900px 520px at 110% 110%, rgba(60,45,30,.10), transparent 55%),
+        var(--cream);
+      min-height:100vh;
+    }
+    ::selection{background:var(--terra);color:var(--cream)}
+    :focus-visible{outline:2px solid var(--terra);outline-offset:3px;border-radius:4px}
 
-  :root{
-    --paper: #EDE3CE;
-    --ink: #2B241D;
-    --brass: #A9813F;
-  }
+    .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-  html{ scroll-behavior: smooth; }
+    /* ---------- Başlıq / Nav ---------- */
+    .site-header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(245,236,220,.92);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid var(--line);
+    }
+    .header-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+    .logo-mark{
+      width:34px;height:34px;border-radius:50%;
+      border:2px solid var(--ink);
+      display:inline-flex;align-items:center;justify-content:center;
+      color:var(--terra);font-size:15px;
+    }
+    .logo-text{font-family:'Playfair Display',serif;font-weight:900;font-size:1.35rem;letter-spacing:.02em}
+    .logo-store{font-style:italic;color:var(--terra);font-weight:700;margin-left:.35em}
+    .nav{display:flex;gap:26px;align-items:center}
+    .nav-link{
+      font-family:'IBM Plex Mono',monospace;font-size:.78rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.14em;text-decoration:none;color:var(--ink);
+      border-bottom:2px solid transparent;padding-bottom:3px;transition:color .2s,border-color .2s;
+    }
+    .nav-link:hover{color:var(--terra);border-color:var(--terra)}
 
-  body{
-    background-color: var(--paper);
-    color: var(--ink);
-    font-family: 'Vollkorn', serif;
-    /* subtle paper grain so flat colour fields don't look digital */
-    background-image:
-      radial-gradient(rgba(43,36,29,0.035) 1px, transparent 1px);
-    background-size: 3px 3px;
-  }
+    /* ---------- Hero ---------- */
+    .hero{padding:60px 24px 14px;text-align:center}
+    .kicker{
+      font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.32em;
+      text-transform:uppercase;color:var(--sage);margin:0 0 14px;
+    }
+    .hero h1{
+      font-family:'Playfair Display',serif;font-weight:900;
+      font-size:clamp(2.6rem,7vw,4.8rem);line-height:1.02;margin:0 0 18px;
+    }
+    .hero h1 em{font-style:italic;color:var(--terra)}
+    .rule{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 auto 18px;max-width:420px}
+    .rule span:first-child,.rule span:last-child{flex:1;height:1px;background:var(--ink)}
+    .diamond{color:var(--terra);font-size:.7rem}
+    .tagline{max-width:560px;margin:0 auto;font-size:1.02rem;color:var(--ink-soft)}
 
-  @media (prefers-reduced-motion: reduce){
-    html{ scroll-behavior: auto; }
-    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
-  }
+    /* ---------- Bölmə başlıqları ---------- */
+    .section-title{
+      font-family:'IBM Plex Mono',monospace;font-size:.8rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.28em;color:var(--terra-dark);
+      display:flex;align-items:center;gap:16px;margin:44px 0 28px;
+    }
+    .section-title::before,.section-title::after{content:"";flex:1;height:1px;background:var(--line)}
 
-  /* Visible, on-brand keyboard focus (accessibility) */
-  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
-    outline: 2px solid var(--rust, #B0502B);
-    outline-offset: 3px;
-  }
+    /* ---------- Buttonlar ---------- */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:14px 26px;border-radius:999px;cursor:pointer;text-decoration:none;
+      font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.9rem;letter-spacing:.04em;
+      border:1.5px solid transparent;transition:transform .22s,background .22s,color .22s,border-color .22s,box-shadow .22s;
+    }
+    .btn.primary{background:var(--ink);color:var(--cream);box-shadow:0 10px 22px -12px rgba(44,38,32,.55)}
+    .btn.primary:hover{background:var(--terra);transform:translateY(-2px)}
+    .btn.ghost{background:transparent;border-color:var(--ink);color:var(--ink)}
+    .btn.ghost:hover{background:var(--ink);color:var(--cream)}
+    .btn.small{padding:10px 20px;font-size:.8rem}
 
-  /* ---------- Film-strip decoration (used once, at the very top of the page) ---------- */
-  .filmstrip{
-    background: repeating-linear-gradient(
-      90deg,
-      #2B241D, #2B241D 10px,
-      transparent 10px, transparent 20px
-    );
-    height: 6px;
-    opacity: .18;
-  }
-  .sprocket-row{
-    display:flex; gap: 14px; overflow:hidden;
-  }
-  .sprocket-row span{
-    width:7px; height:7px; border-radius:1px; background: var(--ink);
-    opacity:.28; flex: 0 0 auto;
-  }
+    /* ---------- Qalxaca (Catalog) ---------- */
+    .grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:28px;padding-bottom:80px;
+    }
+    .card{
+      position:relative;background:var(--paper);border:1px solid var(--line);
+      border-radius:var(--radius);overflow:hidden;cursor:pointer;
+      transition:transform .25s ease,box-shadow .25s ease;
+    }
+    .card:hover{transform:translateY(-6px);box-shadow:0 20px 42px -20px rgba(44,38,32,.4)}
+    .ribbon{
+      position:absolute;top:18px;left:-38px;z-index:2;transform:rotate(-45deg);
+      background:var(--terra);color:var(--cream);
+      font-family:'IBM Plex Mono',monospace;font-size:.62rem;font-weight:600;
+      letter-spacing:.12em;text-transform:uppercase;padding:6px 44px;
+    }
+    .card-media{
+      background:linear-gradient(160deg,var(--cream-2),#e4d3b2);
+      display:flex;align-items:center;justify-content:center;padding:28px;
+    }
+    .card-media svg{width:100%;height:auto;transition:transform .4s ease}
+    .card:hover .card-media svg{transform:scale(1.05) rotate(-1.2deg)}
+    .card-body{padding:18px 22px 24px;border-top:1px dashed var(--line)}
+    .card-year{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.24em;color:var(--sage)}
+    .card-title{font-family:'Playfair Display',serif;font-size:1.45rem;margin:6px 0 8px}
+    .card-short{font-size:.92rem;color:var(--ink-soft);margin:0 0 16px}
+    .card-foot{display:flex;align-items:center;justify-content:space-between}
+    .price{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:1.15rem;color:var(--terra-dark)}
+    .card-cta{
+      font-family:'IBM Plex Mono',monospace;font-size:.74rem;font-weight:600;
+      letter-spacing:.1em;text-transform:uppercase;color:var(--ink);
+    }
+    .card:hover .card-cta{color:var(--terra)}
 
-  /* ---------- Photo-print look for product cards (deckled, mounted) ---------- */
-  .print-frame{
-    background: var(--cream, #F6EEDC);
-    border: 1px solid rgba(43,36,29,0.14);
-    box-shadow: 0 1px 0 rgba(43,36,29,.05), 0 10px 22px -14px rgba(43,36,29,.45);
-    transition: transform .35s ease, box-shadow .35s ease;
-  }
-  .print-frame:hover{
-    transform: translateY(-4px) rotate(var(--tilt, 0deg));
-    box-shadow: 0 18px 30px -16px rgba(43,36,29,.5);
-  }
-  .print-photo{
-    aspect-ratio: 4 / 5;
-    overflow:hidden;
-    background: #d9cdb1;
-    position:relative;
-  }
-  .print-photo img{
-    width:100%; height:100%; object-fit:cover;
-    filter: sepia(.28) contrast(1.02) saturate(.92);
-    transition: filter .5s ease, transform .6s ease;
-  }
-  .print-frame:hover .print-photo img{
-    filter: sepia(.12) contrast(1.05) saturate(1.02);
-    transform: scale(1.035);
-  }
+    /* ---------- Detallar (Detail) ---------- */
+    #view-detail{padding-bottom:80px}
+    .btn-back{margin:30px 0 8px}
+    .detail-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;margin-top:20px}
+    .main-img{
+      background:linear-gradient(160deg,var(--cream-2),#e2d1b0);
+      border:1px solid var(--line);border-radius:var(--radius);padding:28px;
+    }
+    .main-img svg{width:100%;height:auto}
+    .thumbs{display:flex;gap:12px;margin-top:14px}
+    .thumb{
+      width:92px;height:92px;border-radius:12px;border:1.5px solid var(--line);
+      background:var(--cream-2);padding:8px;cursor:pointer;opacity:.75;
+      transition:transform .2s,opacity .2s,border-color .2s,box-shadow .2s;
+    }
+    .thumb svg{width:100%;height:100%}
+    .thumb:hover{transform:translateY(-3px);opacity:1}
+    .thumb.active{border-color:var(--terra);opacity:1;box-shadow:0 8px 18px -10px rgba(168,87,58,.6)}
+    .d-tag{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--sage);margin:0 0 10px}
+    .d-title{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4vw,2.7rem);margin:0 0 14px}
+    .d-desc{color:var(--ink-soft);margin:0 0 4px}
 
-  /* light vignette so photos feel like prints, not app thumbnails */
-  .print-photo::after{
-    content:"";
-    position:absolute; inset:0;
-    box-shadow: inset 0 0 34px rgba(43,36,29,.35);
-    pointer-events:none;
-  }
+    .buy-box{
+      margin-top:26px;padding:22px;border:1px solid var(--line);border-radius:14px;
+      background:var(--paper);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+    }
+    .price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+    .price-row .price{font-size:1.7rem}
+    .old{font-family:'IBM Plex Mono',monospace;color:var(--ink-soft);text-decoration:line-through}
+    .buy-box .btn{width:100%}
+    .note{
+      font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-soft);
+      text-align:center;margin:14px 0 0;
+    }
 
-  .hairline{ border-color: rgba(169,129,63,.55); }
-  .hairline-t{ border-top: 1px solid rgba(169,129,63,.55); }
-  .hairline-b{ border-bottom: 1px solid rgba(169,129,63,.55); }
+    .detail-lower{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+    .panel{
+      background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+      padding:28px;margin-top:28px;
+    }
+    .panel-title{
+      font-family:'Playfair Display',serif;font-size:1.4rem;margin:0 0 18px;
+      padding-bottom:12px;border-bottom:1px dashed var(--line);
+    }
+    .panel-title.mt{margin-top:30px}
+    .features{list-style:none;margin:0;padding:0}
+    .features li{padding:9px 0 9px 30px;position:relative;border-bottom:1px dashed var(--line)}
+    .features li:last-child{border-bottom:none}
+    .features li::before{content:"✦";position:absolute;left:2px;color:var(--terra);font-size:.85rem;top:12px}
 
-  /* stamp-like small labels (used for spec tags — sentence case, not shouty caps) */
-  .stamp-tag{
-    font-family: 'Special Elite', monospace;
-    letter-spacing: .01em;
-    border: 1px dashed rgba(43,36,29,.35);
-    color: var(--ink);
-  }
+    .specs{margin:0}
+    .specs>div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line)}
+    .specs>div:last-child{border-bottom:none}
+    .specs dt{
+      font-family:'IBM Plex Mono',monospace;font-size:.7rem;font-weight:600;
+      text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);padding-top:4px;
+    }
+    .specs dd{margin:0}
 
-  /* view fade — the single orchestrated transition moment when switching pages */
-  .view-enter{ animation: fadeUp .5s ease both; }
-  @keyframes fadeUp{
-    from{ opacity:0; transform: translateY(10px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
+    /* ---------- "Video" önizləməsi ---------- */
+    .video{background:#211b15;color:var(--cream);border-radius:14px;padding:24px;text-align:center}
+    .video-screen{
+      position:relative;height:210px;border:1px dashed #6d604b;border-radius:10px;
+      overflow:hidden;display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+      background:radial-gradient(420px 200px at 50% 35%, #3a3128, #211b15);
+    }
+    .video-lens{font-size:56px;color:#caa96a;transition:transform .3s}
+    .scan{
+      position:absolute;left:0;right:0;top:0;height:70px;opacity:0;
+      background:linear-gradient(180deg,transparent,rgba(202,169,106,.28),transparent);
+      transform:translateY(-80px);pointer-events:none;
+    }
+    .video.playing .scan{opacity:1;animation:scan 1.8s linear infinite}
+    .video.playing .video-lens{animation:spin 7s linear infinite;color:var(--terra)}
+    .video-label{
+      position:absolute;bottom:12px;left:14px;
+      font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.3em;color:#a89878;
+    }
+    .video .btn.ghost{border-color:var(--cream);color:var(--cream);width:100%}
+    .video .btn.ghost:hover{background:var(--cream);color:var(--ink)}
+    @keyframes scan{from{transform:translateY(-80px)}to{transform:translateY(280px)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* gallery thumbs */
-  .thumb{
-    border: 2px solid transparent;
-    transition: border-color .2s ease, filter .2s ease;
-    filter: sepia(.2) saturate(.95);
-  }
-  .thumb.active{
-    border-color: var(--rust, #B0502B);
-    filter: sepia(0) saturate(1);
-  }
+    /* ---------- Footer ---------- */
+    .site-footer{border-top:1px solid var(--line);padding:34px 24px 44px;text-align:center}
+    .site-footer p{font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--ink-soft);margin:6px 0}
+    .site-footer .foot-logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.15rem;color:var(--ink);letter-spacing:.02em}
 
-  .btn-shutter{
-    background: linear-gradient(180deg, #C25E36, #A2461F);
-    box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 8px 18px -8px rgba(162,70,31,.65);
-  }
-  .btn-shutter:hover{ filter: brightness(1.06); }
-  .btn-shutter:active{ transform: translateY(1px); }
+    /* ---------- Sivuiyaç geçişi ---------- */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .view:not([hidden]){animation:fadeUp .45s ease both}
 
-  /* simple scrollbar tone-match (progressive enhancement only) */
-  ::-webkit-scrollbar{ width: 10px; height:10px; }
-  ::-webkit-scrollbar-track{ background: var(--paper); }
-  ::-webkit-scrollbar-thumb{ background: rgba(124,90,58,.45); border-radius: 8px; }
-</style>
+    /* ---------- Responsivilik ---------- */
+    @media (max-width:900px){
+      .detail-grid{grid-template-columns:1fr}
+      .detail-lower{grid-template-columns:1fr}
+    }
+    @media (max-width:560px){
+      .nav{gap:16px}
+      .hero{padding:44px 20px 8px}
+      .specs>div{grid-template-columns:1fr;gap:2px}
+      .main-img{padding:16px}
+      .thumb{width:78px;height:78px}
+      .panel{padding:22px 18px}
+    }
+  </style>
 </head>
+<body>
 
-<body class="antialiased">
-
-  <!-- ======================= TOP FILM-STRIP ACCENT (single decorative motif) ======================= -->
-  <div class="filmstrip"></div>
-
-  <!-- ======================= HEADER / NAV ======================= -->
-  <header class="hairline-b border-b sticky top-0 z-40 backdrop-blur-sm" style="background-color:rgba(237,227,206,0.92);">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
-      <a href="#/" class="flex items-center gap-3 group" aria-label="Balaca Store — ana səhifə">
-        <!-- simple camera glyph mark -->
-        <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-          <rect x="4" y="14" width="40" height="26" rx="2" fill="#2B241D"/>
-          <rect x="16" y="8" width="12" height="7" rx="1" fill="#2B241D"/>
-          <circle cx="24" cy="27" r="9" fill="#EDE3CE" stroke="#2B241D" stroke-width="2"/>
-          <circle cx="24" cy="27" r="4" fill="#B0502B"/>
-          <circle cx="38" cy="19" r="1.6" fill="#EDE3CE"/>
-        </svg>
-        <span class="font-display font-semibold text-xl sm:text-2xl tracking-tight text-ink">Balaca Store</span>
+  <!-- ===================== NAV ===================== -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#/" aria-label="Balaca Store — əsas səhifə">
+        <span class="logo-mark" aria-hidden="true">◉</span>
+        <span class="logo-text">Balaca<span class="logo-store">Store</span></span>
       </a>
-      <p class="hidden md:block font-body italic text-sm text-leather max-w-xs text-right">
-        Hər kadrda bir xatirə — cib ölçülü retro kameralar
-      </p>
+      <nav class="nav" aria-label="Əsas nav">
+        <a class="nav-link" href="#/">Katalog</a>
+        <a class="nav-link" href="https://wa.me/998901234567" target="_blank" rel="noopener">WhatsApp</a>
+      </nav>
     </div>
   </header>
 
-  <!-- ======================= APP ROOT (rendered by JS router) ======================= -->
-  <main id="app" class="max-w-6xl mx-auto px-5 sm:px-8"></main>
+  <main>
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <p class="kicker">Vintazh Mini Kamera Heybeli</p>
+      <h1>Balaca <em>Store</em></h1>
+      <div class="rule" aria-hidden="true"><span></span><span class="diamond">◆</span><span></span></div>
+      <p class="tagline">90-larsa gələn, külünü saxlayan mini kalar.<br>Hər biri təşmir edilib, hər biri Azərbaycanda.</p>
+    </section>
 
-  <!-- ======================= FOOTER ======================= -->
-  <footer class="hairline-t border-t mt-20">
-    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 grid sm:grid-cols-3 gap-8 text-sm">
-      <div>
-        <p class="font-display text-lg text-ink mb-2">Balaca Store</p>
-        <p class="text-leather font-body leading-relaxed">Vintage ruhlu, cib ölçülü fotokameralar. Hər sifariş əl ilə yoxlanılır və diqqətlə qablaşdırılır.</p>
+    <!-- ===================== KALATOQ (Home) ===================== -->
+    <section id="view-catalog" class="view" aria-label="Foto qalxası">
+      <div class="wrap">
+        <h2 class="section-title">Foto qalxası</h2>
+        <div class="grid" id="grid"><!-- kartlar JS ilə dolur --></div>
       </div>
-      <div>
-        <p class="stamp-tag inline-block px-2 py-1 mb-3 text-xs">Əlaqə</p>
-        <ul class="space-y-1 text-leather font-body">
-          <li>Bakı, Azərbaycan</li>
-          <li>WhatsApp: +994 50 123 45 67</li>
-          <li>info@balacastore.az</li>
-        </ul>
+    </section>
+
+    <!-- ===================== URLAN-DETAЛ SƏHİFƏSİ ===================== -->
+    <section id="view-detail" class="view" hidden>
+      <div class="wrap">
+        <button class="btn ghost small btn-back" id="btn-back" type="button">← Katloga qayıt</button>
+        <div id="detail-root"><!-- detallar JS ilə dolur --></div>
       </div>
-      <div>
-        <p class="stamp-tag inline-block px-2 py-1 mb-3 text-xs">İş saatları</p>
-        <ul class="space-y-1 text-leather font-body">
-          <li>Bazar ertəsi – Cümə: 10:00–19:00</li>
-          <li>Şənbə: 11:00–17:00</li>
-          <li>Bazar: İstirahət günü</li>
-        </ul>
-      </div>
-    </div>
-    <div class="sprocket-row px-5 sm:px-8 pb-6 max-w-6xl mx-auto opacity-60">
-      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-    <p class="text-center text-xs text-leather/70 pb-6 font-body">© 2026 Balaca Store. Bütün hüquqlar qorunur.</p>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <p class="foot-logo">Balaca Store</p>
+    <p>Vintazh mini kalar — online məhbə.</p>
+    <p>Sifariş: WhatsApp · 998 90 123 45 67</p>
+    <p>© <span id="year">2024</span> Balaca Store. Hamısı kül qoyu aldanmışdır.</p>
   </footer>
 
-  <script src="app.js"></script>
+  <script>
+  /* ============================================================
+     BALACA STORE — Vanilla JavaScript
+     ============================================================ */
+
+  /* ---------- 1. Sifariş nömrəsi (öz nömrənizə dəyişin) ---------- */
+  const WHATSAPP_NUM = '998901234567';
+
+  /* ---------- 2. Kamera məlumatları ---------- */
+  const PRODUCTS = [
+    {
+      id:'classic-35', name:'Balaca Classic 35', year:'1992',
+      price:189, old:220, tag:'Çok satan',
+      color:'#b06a4a', plate:'#2f2a24', accent:'#f1e4c8',
+      short:'Flaşlı vintazh mini kamera və 35mm kirik — Azərbaycanın özü.',
+      desc:'1992-ci ildə Azərbaycanda birlik içindir. Classic 35 avtomatik flaşını kvil şərtlərində işləyir və 90-lar havasında bir hiss verir — giriş səthi kül oynatmalı, lens isə təşmir edilmiş dairə kimi parlar.',
+      features:['35mm kirik ödənilə bilər','Avtomatik flaş dövrəsi','Rəng və monokrom rejim','Kül yaşlandırma + kül torba'],
+      specs:[['Sensör','Ut-kusursuz 35mm'],['Optik','28mm sabit fokus'],['Kirik','35mm'],['Flaş','Avtomatik, 2 yön'],['Çoxlama','120 tüklü, 12 rəqam'],['Açar sayı','4'],['Cilim','Vinil-plastik']]
+    },
+    {
+      id:'retrocam-6', name:'RetroCam 6', year:'1988',
+      price:215, old:null, tag:'Yeni gələn',
+      color:'#7d7658', plate:'#332e26', accent:'#efe3c6',
+      short:'Sade akrəm — 1988-in uduru ilə charcoal-rəng güclü kamera.',
+      desc:'RetroCam 6 — 1988-ci ildə imal edildi. Kül görünüşünün kardeşi: çevresinə yalnız shutter butonu və film çarkı üstüydür, hamısı çox üstüydür. Bu kamera dokunulmaz işləyir — köprücük ilədan.',
+      features:['Kodlu mekanik shutter','6x6 kvadrat film formatı','Kül qoyu aldanmış akrəm','Köprücük + 30 dayaq çarkı təyin edilib'],
+      specs:[['Format','Film 6x6'],['Optik','40mm menisk lens'],['Film','120 tüklü'],['Flaş','YOX'],['Çoxlama','120 tura'],['Açar sayı','3'],['Cilim','Kül yaşlanmış alüminiy']]
+    },
+    {
+      id:'krem-scout', name:'Krem Scout', year:'1990',
+      price:240, old:null, tag:null,
+      color:'#e8d9b8', plate:'#6b4f3a', accent:'#2f2a24',
+      short:'Krem bədənli Scout — 90-lar mini kamera klassikası.',
+      desc:'Scout, mütənciliklərin gözüktürücüsüdür. Krem bədən, tünd şapka və 90-ların rəngini yıldızlayır. Flaş, 35mm kirik və kül torbalı — kəşf kezmaləsinin arxeti.',
+      features:['35mm kirik ödənilə bilər','Katı flaş dövrəsi','Sabit fokus 28mm','Kül doppio akrəm'],
+      specs:[['Sensör','35mm elektronik'],['Optik','28mm sabit'],['Kirik','35mm'],['Flaş','Katı flaş'],['Çoxlama','6.000 tura + 120'],['Açar sayı','2'],['Cilim','Plast və çelik']]
+    },
+    {
+      id:'sepette-sl45', name:'Sepette SL-45', year:'1985',
+      price:315, old:340, tag:'Xüsus',
+      color:'#2b2620', plate:'#c9c2b2', accent:'#f3ead6',
+      short:'1985-in kül turu — sepette lastikasından dövrülüb tapıldı.',
+      desc:'SL-45 — 1985-in ildə imal edildi. 4.8 megapixel CCD sensor və kül akrəmi ilə garaj fotolarına göz atar. Yazdırılmış köhnə rəsin üstündə kül izləri var — bu kamera ömrünün külüdür.',
+      features:['4.8 megapixel CCD','50mm f/1.8 lens','Elektronik flaş','UV/IR filtrləri daxildir'],
+      specs:[['Sensör','4.8 MP CCD'],['Optik','50mm f/1.8'],['Kirik','35mm / APS'],['Flaş','Elektronik, stroboskop'],['Çoxlama','750 foto'],['Açar sayı','5'],['Cilim','Gümüş + kül akrəm']]
+    },
+    {
+      id:'charcoal-28', name:'Charcoal Flash 28', year:'1995',
+      price:160, old:null, tag:null,
+      color:'#33302a', plate:'#1f1c17', accent:'#d9cba8',
+      short:'Qulaq budur, farq yoxdur: 28mm, flaş, 1995.',
+      desc:'Charcoal Flash 28 — 1995. Sade fikrə sıralanır: mini sayəsində hər şey barıdır. 28mm lens, katı flaş və kül kapağı ilə ilk günü kül müsbəti dir.',
+      features:['28mm f/2.2 lens','Katı flaş dövrəsi','Sabit fokus','Kül kapaq + torba'],
+      specs:[['Rəs ölçünü','960x720'],['Optik','28mm f/2.2'],['Kirik','35mm'],['Flaş','Katı flaş'],['Çoxlama','1.000 tura'],['Açar sayı','2'],['Cilim','Avtomatik polimer']]
+    },
+    {
+      id:'gun-batimi', name:'Gün Batımı Mini', year:'1998',
+      price:275, old:null, tag:'Yeni gələn',
+      color:'#c07a55', plate:'#3a2e26', accent:'#f6e7cd',
+      short:'Gün batımı rəngi və 40mm lensi ilə saklamaya layiq.',
+      desc:'Gün Batımı Mini — 1998. Seçkin rəngi və 40mm lensi ilə gün batımını külənməyə layiq. Kodlu köprücük, lastik yastıq və 30 ildə işləyən pilli — qədim kül dəhlilinə baxmayı sever.',
+      features:['40mm lens','Kodlu köprücük','Elektronik flaş, 30 pill','Lastik yastıq'],
+      specs:[['Çoxlama','3.000 rəqam'],['Optik','40mm f/2.0'],['Kirik','35mm'],['Flaş','Elektronik'],['Akku','4xAA (pill daxildir)'],['Açar sayı','6'],['Cilim','Rəngli polimer']]
+    }
+  ];
+
+  /* ---------- 3. Kömək funksiyaları ---------- */
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const money = n => `${n} ₼`;
+
+  /* ---------- 4. SVG kamera quraşdırıcısı ---------- */
+  function frontSVG(p){
+    const g = 'g' + p.id.replace(/-/g,'');
+    return `
+    <svg viewBox="0 0 480 360" role="img" aria-label="${p.name} kamera" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lens-${g}" cx="38%" cy="32%" r="85%">
+          <stop offset="0%" stop-color="#9fb8b2"/><stop offset="45%" stop-color="#40594f"/><stop offset="100%" stop-color="#131c19"/>
+        </radialGradient>
+        <linearGradient id="sh-${g}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FFF7E6" stop-opacity=".35"/><stop offset="40%" stop-color="#FFF7E6" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="240" cy="326" rx="185" ry="16" fill="#2c2620" opacity=".16"/>
+      <path d="M52 130 C 6 156 6 268 66 302" fill="none" stroke="${p.accent}" stroke-width="13" stroke-linecap="round"/>
+      <path d="M428 130 C 474 156 474 268 414 302" fill="none" stroke="${p.accent}" stroke-width="13" stroke-linecap="round"/>
+      <rect x="44" y="86" width="392" height="222" rx="26" fill="${p.color}"/>
+      <rect x="44" y="86" width="392" height="222" rx="26" fill="url(#sh-${g})"/>
+      <path d="M44 142 V112 A26 26 0 0 1 70 86 H410 A26 26 0 0 1 436 112 V142 Z" fill="${p.plate}"/>
+      <circle cx="96" cy="114" r="17" fill="#241f1a"/>
+      <circle cx="96" cy="114" r="8" fill="none" stroke="${p.accent}" stroke-width="2" stroke-dasharray="3 4"/>
+      <circle cx="384" cy="114" r="13" fill="#1d1915" stroke="${p.accent}" stroke-width="2.5"/>
+      <rect x="330" y="106" width="18" height="16" rx="4" fill="#1d1915"/>
+      <text x="240" y="121" text-anchor="middle" font-family="'Playfair Display', serif" font-weight="700" font-size="16" letter-spacing="5" fill="${p.accent}">BALACA</text>
+      <rect x="72" y="158" width="66" height="40" rx="8" fill="#241f1a"/>
+      <rect x="78" y="164" width="54" height="28" rx="5" fill="#3a352d"/>
+      <rect x="84" y="170" width="20" height="16" rx="3" fill="${p.accent}" opacity=".8"/>
+      <rect x="340" y="156" width="68" height="44" rx="9" fill="#f0e6cf" stroke="#241f1a" stroke-width="3"/>
+      <line x1="348" y1="170" x2="400" y2="170" stroke="#c9b992" stroke-width="3"/>
+      <line x1="348" y1="182" x2="400" y2="182" stroke="#c9b992" stroke-width="3"/>
+      <circle cx="240" cy="226" r="76" fill="#241f1a"/>
+      <circle cx="240" cy="226" r="62" fill="${p.plate}"/>
+      <circle cx="240" cy="226" r="48" fill="url(#lens-${g})"/>
+      <ellipse cx="222" cy="208" rx="16" ry="9" fill="#ffffff" opacity=".5" transform="rotate(-24 222 208)"/>
+      <circle cx="60" cy="292" r="4" fill="#241f1a" opacity=".7"/>
+      <circle cx="420" cy="292" r="4" fill="#241f1a" opacity=".7"/>
+    </svg>`;
+  }
+
+  /* ---------- 5. SVG lens kromonoqrupiyası ---------- */
+  function detailSVG(p){
+    const g = 'g' + p.id.replace(/-/g,'');
+    return `
+    <svg viewBox="0 0 480 360" role="img" aria-label="${p.name} — lens kromonoqrupiyası" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="lens2-${g}" cx="38%" cy="32%" r="85%">
+          <stop offset="0%" stop-color="#9fb8b2"/><stop offset="45%" stop-color="#40594f"/><stop offset="100%" stop-color="#131c19"/>
+        </radialGradient>
+        <path id="tp-${g}" d="M240,180 m-104,0 a104,104 0 1,1 208,0 a104,104 0 1,1 -208,0"/>
+      </defs>
+      <rect x="0" y="0" width="480" height="360" fill="${p.plate}"/>
+      <circle cx="240" cy="180" r="150" fill="#241f1a"/>
+      <circle cx="240" cy="180" r="150" fill="none" stroke="${p.accent}" stroke-width="2" opacity=".5"/>
+      <circle cx="240" cy="180" r="130" fill="none" stroke="${p.accent}" stroke-width="10" stroke-dasharray="2 10" opacity=".65"/>
+      <circle cx="240" cy="180" r="112" fill="${p.color}"/>
+      <circle cx="240" cy="180" r="92" fill="#241f1a"/>
+      <circle cx="240" cy="180" r="72" fill="url(#lens2-${g})"/>
+      <ellipse cx="216" cy="152" rx="22" ry="12" fill="#ffffff" opacity=".5" transform="rotate(-24 216 152)"/>
+      <text font-family="'IBM Plex Mono', monospace" font-size="12" letter-spacing="3" fill="${p.accent}">
+        <textPath href="#tp-${g}">BALACA OPTICS • 28MM F2.8 • VINTAGE •&#x20;</textPath>
+      </text>
+    </svg>`;
+  }
+
+  /* ---------- 6. Katalog qalxası ---------- */
+  function renderCatalog(){
+    $('#grid').innerHTML = PRODUCTS.map(p => `
+      <article class="card" data-hash="#/uradu/${p.id}" tabindex="0" role="link"
+               aria-label="${p.name} — detalları gör">
+        ${p.tag ? `<span class="ribbon">${p.tag}</span>` : ''}
+        <div class="card-media">${frontSVG(p)}</div>
+        <div class="card-body">
+          <span class="card-year">${p.year}</span>
+          <h3 class="card-title">${p.name}</h3>
+          <p class="card-short">${p.short}</p>
+          <div class="card-foot">
+            <span class="price">${money(p.price)}</span>
+            <span class="card-cta">Detallar →</span>
+          </div>
+        </div>
+      </article>`).join('');
+  }
+
+  /* ---------- 7. WhatsApp sifariş linki ---------- */
+  function waUrl(p){
+    const msg = `Salam! ${p.name} (${p.year}) kamera üçün sifariş etmirəm. Qiymət: ${p.price} AZN.`;
+    return `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`;
+  }
+
+  /* ---------- 8. Detallar səhifəsi ---------- */
+  let current = null;
+
+  function renderDetail(p){
+    current = p;
+    document.title = `${p.name} · Balaca Store`;
+    $('#detail-root').innerHTML = `
+      <div class="detail-grid">
+        <div class="detail-media">
+          <div class="main-img" id="main-img">${frontSVG(p)}</div>
+          <div class="thumbs" role="group" aria-label="Rəqam seçimi">
+            <button class="thumb active" data-i="0" type="button" aria-label="Ön görünüş">${frontSVG(p)}</button>
+            <button class="thumb" data-i="1" type="button" aria-label="Lens kromonoqrupiyası">${detailSVG(p)}</button>
+          </div>
+        </div>
+        <div class="detail-info">
+          <p class="d-tag">${p.year} • Vintazh</p>
+          <h1 class="d-title">${p.name}</h1>
+          <p class="d-desc">${p.desc}</p>
+          <div class="buy-box">
+            <div class="price-row">
+              <span class="price">${money(p.price)}</span>
+              ${p.old ? `<span class="old">${money(p.old)}</span>` : ''}
+            </div>
+            <a class="btn primary" href="${waUrl(p)}" target="_blank" rel="noopener">WhatsApp ilə Sifariş Et</a>
+            <p class="note">Sifariş WhatsApp vasitəsilə göndərilir və təsdiqlənir.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-lower">
+        <section class="panel" aria-label="Xüsusiyyətlər və texnika">
+          <h2 class="panel-title">Xüsusiyyətlər</h2>
+          <ul class="features">
+            ${p.features.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+          <h2 class="panel-title mt">Texnik xarakteristika</h2>
+          <dl class="specs">
+            ${p.specs.map(([k,v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}
+          </dl>
+        </section>
+        <section class="panel" aria-label="Video önizləməsi">
+          <h2 class="panel-title">Video önizləməsi</h2>
+          <div class="video">
+            <div class="video-screen">
+              <div class="scan" aria-hidden="true"></div>
+              <div class="video-lens" aria-hidden="true">◉</div>
+              <span class="video-label">RETRO ÖNİZLƏMƏ</span>
+            </div>
+            <button class="btn ghost small" id="btn-video" type="button" aria-pressed="false">▶ Önizləməni başla</button>
+          </div>
+        </section>
+      </div>`;
+  }
+
+  /* ---------- 9. Client-side routing ---------- */
+  const viewCatalog = $('#view-catalog');
+  const viewDetail  = $('#view-detail');
+
+  function showView(which){
+    viewCatalog.hidden = which !== 'catalog';
+    viewDetail.hidden  = which !== 'detail';
+  }
+
+  function route(){
+    const m = location.hash.match(/#\/uradu\/([\w-]+)/);
+    if(m){
+      const p = PRODUCTS.find(x => x.id === m[1]);
+      if(p){
+        renderDetail(p);
+        showView('detail');
+        window.scrollTo({top:0, behavior:'smooth'});
+        return;
+      }
+      location.hash = '#/'; // tapılmayan səhifə → katalog
+      return;
+    }
+    document.title = 'Balaca Store — Vintazh Mini Kamera';
+    showView('catalog');
+    window.scrollTo({top:0});
+  }
+  window.addEventListener('hashchange', route);
+
+  /* ---------- 10. Hadis icmalı ---------- */
+  // Kart → detal səhifəsi
+  document.addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if(card){ location.hash = card.dataset.hash; return; }
+
+    // Küçük şəkil seçimi
+    const thumb = e.target.closest('.thumb');
+    if(thumb && current){
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      $('#main-img').innerHTML = thumb.dataset.i === '0' ? frontSVG(current) : detailSVG(current);
+      return;
+    }
+
+    // Video önizləməsi aç/qapida
+    const vb = e.target.closest('#btn-video');
+    if(vb){
+      const box = vb.closest('.video');
+      const playing = box.classList.toggle('playing');
+      vb.setAttribute('aria-pressed', playing);
+      vb.textContent = playing ? 'Önizləməyi dayandır' : '▶ Önizləməni başla';
+    }
+  });
+
+  // Klaviatura (Enter / Boşluq) ilə kart açılması
+  document.addEventListener('keydown', e => {
+    if((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('card')){
+      e.preventDefault();
+      location.hash = e.target.dataset.hash;
+    }
+  });
+
+  // Geri qayıt düyməsi
+  $('#btn-back').addEventListener('click', () => { location.hash = '#/'; });
+
+  /* ---------- 11. Başlat ---------- */
+  renderCatalog();
+  if(!location.hash) history.replaceState(null, '', '#/');
+  route();
+  $('#year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
