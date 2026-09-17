@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Balaca Store — Retro Mini Kameralar</title>
+<meta name="description" content="Balaca Store — vintage ruhlu, retro mini fotokameraların satışı. Hər kadrda bir xatirə." />
+
+<!-- ============ FONTS (retro serif display + readable serif body + typewriter accent) ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Vollkorn:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+
+<!-- ============ TAILWIND (CDN, for spacing/layout/responsive utilities) ============ -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Extend Tailwind with our retro token system so utility classes stay consistent everywhere
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper:   '#EDE3CE',   // aged paper / base background
+          paper2:  '#E4D8BE',   // slightly deeper paper for panels
+          ink:     '#2B241D',   // near-black warm charcoal (text)
+          leather: '#7C5A3A',   // sepia leather brown
+          rust:    '#B0502B',   // shutter-button accent (used sparingly)
+          olive:   '#6C6B49',   // muted secondary accent
+          brass:   '#A9813F',   // hairline / rule color
+          cream:   '#F6EEDC',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['Vollkorn', 'serif'],
+          stamp: ['"Special Elite"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  /* ============================================================
+     RETRO TOKEN SYSTEM — hand-authored CSS for texture & detail
+     that Tailwind utilities alone can't express (grain, sprocket
+     strip, deckled photo edges, focus rings, transitions).
+     ============================================================ */
+
+  :root{
+    --paper: #EDE3CE;
+    --ink: #2B241D;
+    --brass: #A9813F;
+  }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'Vollkorn', serif;
+    /* subtle paper grain so flat colour fields don't look digital */
+    background-image:
+      radial-gradient(rgba(43,36,29,0.035) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* Visible, on-brand keyboard focus (accessibility) */
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+    outline: 2px solid var(--rust, #B0502B);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Film-strip decoration (used once, at the very top of the page) ---------- */
+  .filmstrip{
+    background: repeating-linear-gradient(
+      90deg,
+      #2B241D, #2B241D 10px,
+      transparent 10px, transparent 20px
+    );
+    height: 6px;
+    opacity: .18;
+  }
+  .sprocket-row{
+    display:flex; gap: 14px; overflow:hidden;
+  }
+  .sprocket-row span{
+    width:7px; height:7px; border-radius:1px; background: var(--ink);
+    opacity:.28; flex: 0 0 auto;
+  }
+
+  /* ---------- Photo-print look for product cards (deckled, mounted) ---------- */
+  .print-frame{
+    background: var(--cream, #F6EEDC);
+    border: 1px solid rgba(43,36,29,0.14);
+    box-shadow: 0 1px 0 rgba(43,36,29,.05), 0 10px 22px -14px rgba(43,36,29,.45);
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .print-frame:hover{
+    transform: translateY(-4px) rotate(var(--tilt, 0deg));
+    box-shadow: 0 18px 30px -16px rgba(43,36,29,.5);
+  }
+  .print-photo{
+    aspect-ratio: 4 / 5;
+    overflow:hidden;
+    background: #d9cdb1;
+    position:relative;
+  }
+  .print-photo img{
+    width:100%; height:100%; object-fit:cover;
+    filter: sepia(.28) contrast(1.02) saturate(.92);
+    transition: filter .5s ease, transform .6s ease;
+  }
+  .print-frame:hover .print-photo img{
+    filter: sepia(.12) contrast(1.05) saturate(1.02);
+    transform: scale(1.035);
+  }
+
+  /* light vignette so photos feel like prints, not app thumbnails */
+  .print-photo::after{
+    content:"";
+    position:absolute; inset:0;
+    box-shadow: inset 0 0 34px rgba(43,36,29,.35);
+    pointer-events:none;
+  }
+
+  .hairline{ border-color: rgba(169,129,63,.55); }
+  .hairline-t{ border-top: 1px solid rgba(169,129,63,.55); }
+  .hairline-b{ border-bottom: 1px solid rgba(169,129,63,.55); }
+
+  /* stamp-like small labels (used for spec tags — sentence case, not shouty caps) */
+  .stamp-tag{
+    font-family: 'Special Elite', monospace;
+    letter-spacing: .01em;
+    border: 1px dashed rgba(43,36,29,.35);
+    color: var(--ink);
+  }
+
+  /* view fade — the single orchestrated transition moment when switching pages */
+  .view-enter{ animation: fadeUp .5s ease both; }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(10px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /* gallery thumbs */
+  .thumb{
+    border: 2px solid transparent;
+    transition: border-color .2s ease, filter .2s ease;
+    filter: sepia(.2) saturate(.95);
+  }
+  .thumb.active{
+    border-color: var(--rust, #B0502B);
+    filter: sepia(0) saturate(1);
+  }
+
+  .btn-shutter{
+    background: linear-gradient(180deg, #C25E36, #A2461F);
+    box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 8px 18px -8px rgba(162,70,31,.65);
+  }
+  .btn-shutter:hover{ filter: brightness(1.06); }
+  .btn-shutter:active{ transform: translateY(1px); }
+
+  /* simple scrollbar tone-match (progressive enhancement only) */
+  ::-webkit-scrollbar{ width: 10px; height:10px; }
+  ::-webkit-scrollbar-track{ background: var(--paper); }
+  ::-webkit-scrollbar-thumb{ background: rgba(124,90,58,.45); border-radius: 8px; }
+</style>
+</head>
+
+<body class="antialiased">
+
+  <!-- ======================= TOP FILM-STRIP ACCENT (single decorative motif) ======================= -->
+  <div class="filmstrip"></div>
+
+  <!-- ======================= HEADER / NAV ======================= -->
+  <header class="hairline-b border-b sticky top-0 z-40 backdrop-blur-sm" style="background-color:rgba(237,227,206,0.92);">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between gap-4">
+      <a href="#/" class="flex items-center gap-3 group" aria-label="Balaca Store — ana səhifə">
+        <!-- simple camera glyph mark -->
+        <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+          <rect x="4" y="14" width="40" height="26" rx="2" fill="#2B241D"/>
+          <rect x="16" y="8" width="12" height="7" rx="1" fill="#2B241D"/>
+          <circle cx="24" cy="27" r="9" fill="#EDE3CE" stroke="#2B241D" stroke-width="2"/>
+          <circle cx="24" cy="27" r="4" fill="#B0502B"/>
+          <circle cx="38" cy="19" r="1.6" fill="#EDE3CE"/>
+        </svg>
+        <span class="font-display font-semibold text-xl sm:text-2xl tracking-tight text-ink">Balaca Store</span>
+      </a>
+      <p class="hidden md:block font-body italic text-sm text-leather max-w-xs text-right">
+        Hər kadrda bir xatirə — cib ölçülü retro kameralar
+      </p>
+    </div>
+  </header>
+
+  <!-- ======================= APP ROOT (rendered by JS router) ======================= -->
+  <main id="app" class="max-w-6xl mx-auto px-5 sm:px-8"></main>
+
+  <!-- ======================= FOOTER ======================= -->
+  <footer class="hairline-t border-t mt-20">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 py-10 grid sm:grid-cols-3 gap-8 text-sm">
+      <div>
+        <p class="font-display text-lg text-ink mb-2">Balaca Store</p>
+        <p class="text-leather font-body leading-relaxed">Vintage ruhlu, cib ölçülü fotokameralar. Hər sifariş əl ilə yoxlanılır və diqqətlə qablaşdırılır.</p>
+      </div>
+      <div>
+        <p class="stamp-tag inline-block px-2 py-1 mb-3 text-xs">Əlaqə</p>
+        <ul class="space-y-1 text-leather font-body">
+          <li>Bakı, Azərbaycan</li>
+          <li>WhatsApp: +994 50 123 45 67</li>
+          <li>info@balacastore.az</li>
+        </ul>
+      </div>
+      <div>
+        <p class="stamp-tag inline-block px-2 py-1 mb-3 text-xs">İş saatları</p>
+        <ul class="space-y-1 text-leather font-body">
+          <li>Bazar ertəsi – Cümə: 10:00–19:00</li>
+          <li>Şənbə: 11:00–17:00</li>
+          <li>Bazar: İstirahət günü</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sprocket-row px-5 sm:px-8 pb-6 max-w-6xl mx-auto opacity-60">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <p class="text-center text-xs text-leather/70 pb-6 font-body">© 2026 Balaca Store. Bütün hüquqlar qorunur.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
